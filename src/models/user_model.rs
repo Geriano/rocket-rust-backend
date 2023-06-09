@@ -59,7 +59,7 @@ impl User {
       .get_result(conn)
   }
 
-  pub fn update(&self, conn: &mut PgConnection) -> Result<usize, Error> {
+  pub fn update(&self, conn: &mut PgConnection) -> Result<User, Error> {
     diesel::update(users::table)
       .filter(users::id.eq(self.id.clone()))
       .set((
@@ -70,15 +70,15 @@ impl User {
         users::password.eq(self.password.clone()),
         users::updated_at.eq(Utc::now().naive_local()),
       ))
-      .execute(conn)
+      .get_result(conn)
   }
 
-  pub fn delete(&mut self, conn: &mut PgConnection) -> Result<usize, Error> {
+  pub fn delete(&mut self, conn: &mut PgConnection) -> Result<User, Error> {
     self.deleted_at = Some(Utc::now().naive_local());
     self.update(conn)
   }
 
-  pub fn recovery(&mut self, conn: &mut PgConnection) -> Result<usize, Error> {
+  pub fn recovery(&mut self, conn: &mut PgConnection) -> Result<User, Error> {
     self.deleted_at = None;
     self.update(conn)
   }

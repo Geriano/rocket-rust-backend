@@ -8,6 +8,7 @@ mod controllers;
 mod helpers;
 mod middleware;
 mod models;
+mod oas;
 mod requests;
 mod responses;
 mod schemas;
@@ -17,4 +18,5 @@ fn rocket() -> _ {
     dotenv().ok();
 
     rocket::build()
+        .mount("/api/v1/user", controllers::user::routes())
 }
