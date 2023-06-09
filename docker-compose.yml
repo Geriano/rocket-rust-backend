@@ -1,0 +1,13 @@
+name: 'rocket'
+version: '3.1'
+services:
+  postgres:
+    container_name: rocket-postgres
+    image: postgres
+    environment:
+      TZ: Asia/Jakarta
+      POSTGRES_DB: rocket
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - 5432:5432
