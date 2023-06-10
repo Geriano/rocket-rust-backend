@@ -2,11 +2,13 @@ mod pagination_response;
 mod user_response;
 mod permission_response;
 mod role_response;
+mod auth_response;
 
 use rocket::{response::status, http::Status, serde::json::Json};
 use serde::{Deserialize, Serialize};
 
 pub use pagination_response::Pagination;
+pub use auth_response::AuthenticatedResponse;
 
 pub type CustomJsonResponse = status::Custom<Json<Response>>;
 pub type AppResponse<T> = Result<T, CustomJsonResponse>;
@@ -25,6 +27,10 @@ impl Response {
         message
       }
     ))
+  }
+
+  pub fn unauthorize() -> CustomJsonResponse {
+    Response::new(Status::Unauthorized, "Unauthorized".to_string())
   }
 
   pub fn bad_request(message: String) -> CustomJsonResponse {

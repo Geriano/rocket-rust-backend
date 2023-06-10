@@ -18,6 +18,7 @@ fn rocket() -> _ {
     dotenv().ok();
 
     rocket::build()
+        .mount("/api/v1/auth", controllers::auth::routes())
         .mount("/api/v1/user", controllers::user::routes())
         .mount("/api/v1/permission", controllers::permission::routes())
         .mount("/api/v1/role", controllers::role::routes())
