@@ -1,5 +1,6 @@
 mod pagination_response;
 mod user_response;
+mod permission_response;
 
 use rocket::{response::status, http::Status, serde::json::Json};
 use serde::{Deserialize, Serialize};

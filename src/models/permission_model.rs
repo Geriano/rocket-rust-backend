@@ -54,14 +54,14 @@ impl Permission {
       .get_result(conn)
   }
 
-  pub fn update(&self, conn: &mut PgConnection) -> Result<usize, Error> {
+  pub fn update(&self, conn: &mut PgConnection) -> Result<Permission, Error> {
     diesel::update(permissions::table)
       .set((
         permissions::code.eq(self.code.clone()),
         permissions::name.eq(self.name.clone()),
         permissions::updated_at.eq(Utc::now().naive_local()),
       ))
-      .execute(conn)
+      .get_result(conn)
   }
 
   pub fn delete(&self, conn: &mut PgConnection) -> Result<usize, Error> {
