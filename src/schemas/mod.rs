@@ -1,12 +1,12 @@
-mod user_schema;
-mod permission_schema;
-mod role_schema;
-mod api_token_schema;
+mod user;
+mod permission;
+mod role;
+mod api_token;
 
-pub use user_schema::users;
-pub use permission_schema::permissions;
-pub use permission_schema::permission_user;
-pub use permission_schema::permission_role;
-pub use role_schema::roles;
-pub use role_schema::role_user;
-pub use api_token_schema::api_tokens;
+pub use user::users;
+pub use permission::permissions;
+pub use permission::permission_user;
+pub use permission::permission_role;
+pub use role::roles;
+pub use role::role_user;
+pub use api_token::api_tokens;

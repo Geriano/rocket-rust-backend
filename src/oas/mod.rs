@@ -1,7 +1,7 @@
-mod user_oas;
-mod permission_oas;
-mod role_oas;
+mod user;
+mod permission;
+mod role;
 
-pub use user_oas::UserOAS;
-pub use permission_oas::PermissionOAS;
-pub use role_oas::RoleOAS;
+pub use user::UserOAS;
+pub use permission::PermissionOAS;
+pub use role::RoleOAS;

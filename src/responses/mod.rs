@@ -1,14 +1,14 @@
-mod pagination_response;
-mod user_response;
-mod permission_response;
-mod role_response;
-mod auth_response;
+mod pagination;
+mod user;
+mod permission;
+mod role;
+mod auth;
 
 use rocket::{response::status, http::Status, serde::json::Json};
 use serde::{Deserialize, Serialize};
 
-pub use pagination_response::Pagination;
-pub use auth_response::AuthenticatedResponse;
+pub use pagination::Pagination;
+pub use auth::AuthenticatedResponse;
 
 pub type CustomJsonResponse = status::Custom<Json<Response>>;
 pub type AppResponse<T> = Result<T, CustomJsonResponse>;
