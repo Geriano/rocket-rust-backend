@@ -24,11 +24,11 @@ use crate::{
     PermissionUpdateRequest
   },
   helpers::get_conn,
-  oas::RoleOAS
+  oas::RoleOAS, middleware::Authentication
 };
 
 #[get("/")]
-pub async fn all() -> JsonResponse<Vec<RoleOAS>> {
+pub async fn all(authentication: Authentication) -> JsonResponse<Vec<RoleOAS>> {
   let mut conn = get_conn();
   let roles = Role::all(&mut conn);
 
@@ -45,7 +45,7 @@ pub async fn all() -> JsonResponse<Vec<RoleOAS>> {
 }
 
 #[post("/", data = "<request>")]
-pub async fn create(request: Json<PermissionCreateRequest>) -> JsonResponse<RoleOAS> {
+pub async fn create(authentication: Authentication, request: Json<PermissionCreateRequest>) -> JsonResponse<RoleOAS> {
   if request.code.is_empty() || request.name.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()
@@ -81,7 +81,7 @@ pub async fn create(request: Json<PermissionCreateRequest>) -> JsonResponse<Role
 }
 
 #[get("/<id>")]
-pub async fn show(id: String) -> JsonResponse<RoleOAS> {
+pub async fn show(authentication: Authentication, id: String) -> JsonResponse<RoleOAS> {
   if id.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()
@@ -99,7 +99,7 @@ pub async fn show(id: String) -> JsonResponse<RoleOAS> {
 }
 
 #[put("/<id>", data = "<request>")]
-pub async fn update(id: String, request: Json<PermissionUpdateRequest>) -> JsonResponse<RoleOAS> {
+pub async fn update(authentication: Authentication, id: String, request: Json<PermissionUpdateRequest>) -> JsonResponse<RoleOAS> {
   if id.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()
@@ -127,7 +127,7 @@ pub async fn update(id: String, request: Json<PermissionUpdateRequest>) -> JsonR
 }
 
 #[delete("/<id>")]
-pub async fn delete(id: String) -> JsonResponse<RoleOAS> {
+pub async fn delete(authentication: Authentication, id: String) -> JsonResponse<RoleOAS> {
   if id.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()
@@ -154,7 +154,7 @@ pub async fn delete(id: String) -> JsonResponse<RoleOAS> {
 }
 
 #[put("/sync-user", data = "<request>")]
-pub async fn sync_permission_user(request: Json<SyncRoleToUser>) -> JsonResponse<Vec<Role>> {
+pub async fn sync_permission_user(authentication: Authentication, request: Json<SyncRoleToUser>) -> JsonResponse<Vec<Role>> {
   if request.user_id.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()
@@ -209,7 +209,7 @@ pub async fn sync_permission_user(request: Json<SyncRoleToUser>) -> JsonResponse
 }
 
 #[put("/sync-role", data = "<request>")]
-pub async fn sync_permission_role(request: Json<SyncPermissionToRole>) -> JsonResponse<Vec<Role>> {
+pub async fn sync_permission_role(authentication: Authentication, request: Json<SyncPermissionToRole>) -> JsonResponse<Vec<Role>> {
   if request.role_id.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()

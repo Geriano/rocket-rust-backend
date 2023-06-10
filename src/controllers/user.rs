@@ -22,11 +22,12 @@ use crate::{
     JsonResponse, AppResponse,
   },
   schemas::users,
-  oas::UserOAS,
+  oas::UserOAS, middleware::Authentication,
 };
 
 #[get("/?<page>&<limit>&<search>")]
 pub fn pagination(
+  authentication: Authentication, 
   page: Option<i64>,
   limit: Option<i64>,
   search: Option<String>
@@ -97,7 +98,7 @@ pub fn pagination(
 }
 
 #[post("/", data = "<request>")]
-pub fn store(request: Json<UserStoreRequest>) -> JsonResponse<UserOAS> {
+pub fn store(authentication: Authentication, request: Json<UserStoreRequest>) -> JsonResponse<UserOAS> {
   if request.name.is_empty() || request.email.is_empty() || request.username.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()
@@ -150,7 +151,7 @@ pub fn store(request: Json<UserStoreRequest>) -> JsonResponse<UserOAS> {
 }
 
 #[get("/<id>")]
-pub fn show(id: String) -> JsonResponse<UserOAS> {
+pub fn show(authentication: Authentication, id: String) -> JsonResponse<UserOAS> {
   if id.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()
@@ -168,7 +169,7 @@ pub fn show(id: String) -> JsonResponse<UserOAS> {
 }
 
 #[put("/<id>", data = "<request>")]
-pub fn update(id: String, request: Json<UserUpdateGeneralInformationRequest>) -> JsonResponse<UserOAS> {
+pub fn update(authentication: Authentication, id: String, request: Json<UserUpdateGeneralInformationRequest>) -> JsonResponse<UserOAS> {
   if id.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()
@@ -218,7 +219,7 @@ pub fn update(id: String, request: Json<UserUpdateGeneralInformationRequest>) ->
 }
 
 #[put("/<id>/password", data = "<request>")]
-pub fn update_password(id: String, request: Json<UserUpdatePasswordRequest>) -> JsonResponse<UserOAS> {
+pub fn update_password(authentication: Authentication, id: String, request: Json<UserUpdatePasswordRequest>) -> JsonResponse<UserOAS> {
   if id.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()
@@ -259,7 +260,7 @@ pub fn update_password(id: String, request: Json<UserUpdatePasswordRequest>) -> 
 }
 
 #[delete("/<id>")]
-pub fn delete(id: String) -> JsonResponse<UserOAS> {
+pub fn delete(authentication: Authentication, id: String) -> JsonResponse<UserOAS> {
   if id.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()
@@ -283,7 +284,7 @@ pub fn delete(id: String) -> JsonResponse<UserOAS> {
 }
 
 #[delete("/<id>/purge")]
-pub fn purge(id: String) -> AppResponse<()> {
+pub fn purge(authentication: Authentication, id: String) -> AppResponse<()> {
   if id.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()
