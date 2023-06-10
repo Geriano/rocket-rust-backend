@@ -1,3 +1,4 @@
+pub mod catcher;
 pub mod auth;
 pub mod user;
 pub mod permission;
