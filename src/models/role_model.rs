@@ -57,14 +57,14 @@ impl Role {
       .get_result(conn)
   }
 
-  pub fn update(&self, conn: &mut PgConnection) -> Result<usize, Error> {
+  pub fn update(&self, conn: &mut PgConnection) -> Result<Role, Error> {
     diesel::update(roles::table)
       .set((
         roles::code.eq(self.code.clone()),
         roles::name.eq(self.name.clone()),
         roles::updated_at.eq(Utc::now().naive_local()),
       ))
-      .execute(conn)
+      .get_result(conn)
   }
 
   pub fn delete(&self, conn: &mut PgConnection) -> Result<usize, Error> {

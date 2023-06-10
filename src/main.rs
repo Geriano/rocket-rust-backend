@@ -20,4 +20,5 @@ fn rocket() -> _ {
     rocket::build()
         .mount("/api/v1/user", controllers::user::routes())
         .mount("/api/v1/permission", controllers::permission::routes())
+        .mount("/api/v1/role", controllers::role::routes())
 }
