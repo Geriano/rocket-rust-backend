@@ -16,3 +16,5 @@ serde = { version = "1.0.130", features = ["derive"] }
 serde_json = { version = "1.0" }
 sha2 = "0.10.6"
 hex = "0.4.3"
+utoipa-swagger-ui = { version = "3", features = ["rocket"] }
+utoipa = "3.3.0"

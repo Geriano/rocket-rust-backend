@@ -21,12 +21,26 @@ use crate::{
     PaginationResponse,
     JsonResponse, AppResponse,
   },
+  oas::{
+    UserOAS,
+    UserPaginationOAS,
+  },
   schemas::users,
-  oas::UserOAS, middleware::Authentication,
+  middleware::Authentication,
 };
 
+#[utoipa::path(
+  get,
+  tag = "Master User",
+  path = "/api/v1/user/",
+  responses(
+    (status = 200, description = "Get pagination of user", body = UserPaginationOAS),
+    (status = 400, description = "BAD REQUEST"),
+    (status = 500, description = "INTERNAL SERVER ERROR")
+  )
+)]
 #[get("/?<page>&<limit>&<search>")]
-pub fn pagination(
+pub async fn pagination(
   authentication: Authentication, 
   page: Option<i64>,
   limit: Option<i64>,
@@ -97,8 +111,19 @@ pub fn pagination(
   ))
 }
 
+#[utoipa::path(
+  post,
+  path = "/api/v1/user/",
+  tag = "Master User",
+  responses(
+    (status = 200, description = "Create user", body = UserOAS),
+    (status = 400, description = "BAD REQUEST"),
+    (status = 500, description = "INTERNAL SERVER ERROR")
+  ),
+  request_body = UserStoreRequest,
+)]
 #[post("/", data = "<request>")]
-pub fn store(authentication: Authentication, request: Json<UserStoreRequest>) -> JsonResponse<UserOAS> {
+pub async fn store(authentication: Authentication, request: Json<UserStoreRequest>) -> JsonResponse<UserOAS> {
   if request.name.is_empty() || request.email.is_empty() || request.username.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()
@@ -150,8 +175,21 @@ pub fn store(authentication: Authentication, request: Json<UserStoreRequest>) ->
   Ok(user.success())
 }
 
+#[utoipa::path(
+  get,
+  path = "/api/v1/user/{id}",
+  tag = "Master User",
+  responses(
+    (status = 200, description = "Get pagination of user", body = UserOAS),
+    (status = 400, description = "BAD REQUEST"),
+    (status = 500, description = "INTERNAL SERVER ERROR")
+  ),
+  params(
+    ("id" = String, Path, description = "User ID"),
+  )
+)]
 #[get("/<id>")]
-pub fn show(authentication: Authentication, id: String) -> JsonResponse<UserOAS> {
+pub async fn show(authentication: Authentication, id: String) -> JsonResponse<UserOAS> {
   if id.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()
@@ -168,8 +206,21 @@ pub fn show(authentication: Authentication, id: String) -> JsonResponse<UserOAS>
   Ok(user.success())
 }
 
+#[utoipa::path(
+  put,
+  path = "/api/v1/user/{id}",
+  tag = "Master User",
+  responses(
+    (status = 200, description = "Get pagination of user", body = UserOAS),
+    (status = 400, description = "BAD REQUEST"),
+    (status = 500, description = "INTERNAL SERVER ERROR")
+  ),
+  params(
+    ("id" = String, Path, description = "User ID"),
+  )
+)]
 #[put("/<id>", data = "<request>")]
-pub fn update(authentication: Authentication, id: String, request: Json<UserUpdateGeneralInformationRequest>) -> JsonResponse<UserOAS> {
+pub async fn update(authentication: Authentication, id: String, request: Json<UserUpdateGeneralInformationRequest>) -> JsonResponse<UserOAS> {
   if id.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()
@@ -218,8 +269,21 @@ pub fn update(authentication: Authentication, id: String, request: Json<UserUpda
   Ok(user.success())
 }
 
+#[utoipa::path(
+  put,
+  path = "/api/v1/user/{id}/password",
+  tag = "Master User",
+  responses(
+    (status = 200, description = "Get pagination of user", body = UserOAS),
+    (status = 400, description = "BAD REQUEST"),
+    (status = 500, description = "INTERNAL SERVER ERROR")
+  ),
+  params(
+    ("id" = String, Path, description = "User ID"),
+  )
+)]
 #[put("/<id>/password", data = "<request>")]
-pub fn update_password(authentication: Authentication, id: String, request: Json<UserUpdatePasswordRequest>) -> JsonResponse<UserOAS> {
+pub async fn update_password(authentication: Authentication, id: String, request: Json<UserUpdatePasswordRequest>) -> JsonResponse<UserOAS> {
   if id.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()
@@ -259,8 +323,21 @@ pub fn update_password(authentication: Authentication, id: String, request: Json
   Ok(user.success())
 }
 
+#[utoipa::path(
+  delete,
+  path = "/api/v1/user/{id}",
+  tag = "Master User",
+  responses(
+    (status = 200, description = "Delete user", body = UserOAS),
+    (status = 400, description = "BAD REQUEST"),
+    (status = 500, description = "INTERNAL SERVER ERROR")
+  ),
+  params(
+    ("id" = String, Path, description = "User ID"),
+  )
+)]
 #[delete("/<id>")]
-pub fn delete(authentication: Authentication, id: String) -> JsonResponse<UserOAS> {
+pub async fn delete(authentication: Authentication, id: String) -> JsonResponse<UserOAS> {
   if id.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()
@@ -283,8 +360,21 @@ pub fn delete(authentication: Authentication, id: String) -> JsonResponse<UserOA
   Ok(user.success())
 }
 
+#[utoipa::path(
+  delete,
+  path = "/api/v1/user/{id}/purge",
+  tag = "Master User",
+  responses(
+    (status = 200, description = "Purge user", body = UserOAS),
+    (status = 400, description = "BAD REQUEST"),
+    (status = 500, description = "INTERNAL SERVER ERROR")
+  ),
+  params(
+    ("id" = String, Path, description = "User ID"),
+  )
+)]
 #[delete("/<id>/purge")]
-pub fn purge(authentication: Authentication, id: String) -> AppResponse<()> {
+pub async fn purge(authentication: Authentication, id: String) -> AppResponse<()> {
   if id.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()
