@@ -18,15 +18,26 @@ use crate::{
     PermissionRole
   },
   requests::{
-    PermissionCreateRequest,
     SyncRoleToUser,
     SyncPermissionToRole,
-    PermissionUpdateRequest
+    RoleUpdateRequest,
+    RoleCreateRequest
   },
   helpers::get_conn,
-  oas::RoleOAS, middleware::Authentication
+  oas::RoleOAS,
+  middleware::Authentication
 };
 
+#[utoipa::path(
+  get,
+  tag = "Master Role",
+  path = "/api/v1/role/",
+  responses(
+    (status = 200, description = "Get all role", body = [RoleOAS]),
+    (status = 400, description = "BAD REQUEST"),
+    (status = 500, description = "INTERNAL SERVER ERROR")
+  )
+)]
 #[get("/")]
 pub async fn all(authentication: Authentication) -> JsonResponse<Vec<RoleOAS>> {
   let mut conn = get_conn();
@@ -44,8 +55,19 @@ pub async fn all(authentication: Authentication) -> JsonResponse<Vec<RoleOAS>> {
   ))
 }
 
+#[utoipa::path(
+  post,
+  tag = "Master Role",
+  request_body = RoleCreateRequest,
+  path = "/api/v1/role/",
+  responses(
+    (status = 200, description = "Create role", body = RoleOAS),
+    (status = 400, description = "BAD REQUEST"),
+    (status = 500, description = "INTERNAL SERVER ERROR")
+  )
+)]
 #[post("/", data = "<request>")]
-pub async fn create(authentication: Authentication, request: Json<PermissionCreateRequest>) -> JsonResponse<RoleOAS> {
+pub async fn store(authentication: Authentication, request: Json<RoleCreateRequest>) -> JsonResponse<RoleOAS> {
   if request.code.is_empty() || request.name.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()
@@ -80,6 +102,19 @@ pub async fn create(authentication: Authentication, request: Json<PermissionCrea
   Ok(role.success())
 }
 
+#[utoipa::path(
+  get,
+  tag = "Master Role",
+  path = "/api/v1/role/{id}",
+  responses(
+    (status = 200, description = "Show role by id", body = RoleOAS),
+    (status = 400, description = "BAD REQUEST"),
+    (status = 500, description = "INTERNAL SERVER ERROR")
+  ),
+  params(
+    ("id" = String, description = "Role Id"),
+  ),
+)]
 #[get("/<id>")]
 pub async fn show(authentication: Authentication, id: String) -> JsonResponse<RoleOAS> {
   if id.is_empty() {
@@ -98,8 +133,22 @@ pub async fn show(authentication: Authentication, id: String) -> JsonResponse<Ro
   Ok(role.success())
 }
 
+#[utoipa::path(
+  put,
+  tag = "Master Role",
+  path = "/api/v1/role/{id}",
+  request_body = RoleUpdateRequest,
+  responses(
+    (status = 200, description = "Update role by id", body = RoleOAS),
+    (status = 400, description = "BAD REQUEST"),
+    (status = 500, description = "INTERNAL SERVER ERROR")
+  ),
+  params(
+    ("id" = String, description = "Role Id"),
+  ),
+)]
 #[put("/<id>", data = "<request>")]
-pub async fn update(authentication: Authentication, id: String, request: Json<PermissionUpdateRequest>) -> JsonResponse<RoleOAS> {
+pub async fn update(authentication: Authentication, id: String, request: Json<RoleUpdateRequest>) -> JsonResponse<RoleOAS> {
   if id.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()
@@ -126,6 +175,19 @@ pub async fn update(authentication: Authentication, id: String, request: Json<Pe
   Ok(role.success())
 }
 
+#[utoipa::path(
+  delete,
+  tag = "Master Role",
+  path = "/api/v1/role/{id}",
+  responses(
+    (status = 200, description = "Delete role by id", body = RoleOAS),
+    (status = 400, description = "BAD REQUEST"),
+    (status = 500, description = "INTERNAL SERVER ERROR")
+  ),
+  params(
+    ("id" = String, description = "Role Id"),
+  ),
+)]
 #[delete("/<id>")]
 pub async fn delete(authentication: Authentication, id: String) -> JsonResponse<RoleOAS> {
   if id.is_empty() {
@@ -153,8 +215,19 @@ pub async fn delete(authentication: Authentication, id: String) -> JsonResponse<
   Ok(role.success())
 }
 
+#[utoipa::path(
+  put,
+  tag = "Master Role",
+  path = "/api/v1/role/sync-user",
+  request_body = SyncRoleToUser,
+  responses(
+    (status = 200, description = "Sync role with user", body = [RoleOAS]),
+    (status = 400, description = "BAD REQUEST"),
+    (status = 500, description = "INTERNAL SERVER ERROR")
+  ),
+)]
 #[put("/sync-user", data = "<request>")]
-pub async fn sync_permission_user(authentication: Authentication, request: Json<SyncRoleToUser>) -> JsonResponse<Vec<Role>> {
+pub async fn sync_role_user(authentication: Authentication, request: Json<SyncRoleToUser>) -> JsonResponse<Vec<Role>> {
   if request.user_id.is_empty() {
     return Err(Response::bad_request(
       "BAD REQUEST".to_string()
@@ -208,6 +281,17 @@ pub async fn sync_permission_user(authentication: Authentication, request: Json<
   Ok(permissions.success())
 }
 
+#[utoipa::path(
+  put,
+  tag = "Master Role",
+  path = "/api/v1/role/sync-role",
+  request_body = SyncPermissionToRole,
+  responses(
+    (status = 200, description = "Sync permission with role", body = [RoleOAS]),
+    (status = 400, description = "BAD REQUEST"),
+    (status = 500, description = "INTERNAL SERVER ERROR")
+  ),
+)]
 #[put("/sync-role", data = "<request>")]
 pub async fn sync_permission_role(authentication: Authentication, request: Json<SyncPermissionToRole>) -> JsonResponse<Vec<Role>> {
   if request.role_id.is_empty() {
@@ -266,5 +350,5 @@ pub async fn sync_permission_role(authentication: Authentication, request: Json<
 }
 
 pub fn routes() -> Vec<Route> {
-  routes![all, create, show, update, delete, sync_permission_user, sync_permission_role]
+  routes![all, store, show, update, delete, sync_role_user, sync_permission_role]
 }
