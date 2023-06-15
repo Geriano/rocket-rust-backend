@@ -28,12 +28,13 @@ use crate::{
   oas::PermissionOAS, middleware::Authentication
 };
 
+/// Get all permission
 #[utoipa::path(
   get,
   tag = "Master Permission",
   path = "/api/v1/permission/",
   responses(
-    (status = 200, description = "Get all permission", body = [PermissionOAS]),
+    (status = 200, description = "OK", body = [PermissionOAS]),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   )
@@ -55,13 +56,14 @@ pub async fn all(authentication: Authentication) -> JsonResponse<Vec<PermissionO
   ))
 }
 
+/// Create of permission
 #[utoipa::path(
   post,
   tag = "Master Permission",
   request_body = PermissionCreateRequest,
   path = "/api/v1/permission/",
   responses(
-    (status = 200, description = "Create of permission", body = PermissionOAS),
+    (status = 200, description = "OK", body = PermissionOAS),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   )
@@ -102,12 +104,13 @@ pub async fn store(authentication: Authentication, request: Json<PermissionCreat
   Ok(permission.success())
 }
 
+/// Show permission by id
 #[utoipa::path(
   get,
   tag = "Master Permission",
   path = "/api/v1/permission/{id}",
   responses(
-    (status = 200, description = "Show permission by id", body = PermissionOAS),
+    (status = 200, description = "OK", body = PermissionOAS),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
@@ -133,13 +136,14 @@ pub async fn show(authentication: Authentication, id: String) -> JsonResponse<Pe
   Ok(permission.success())
 }
 
+/// Update permission by id
 #[utoipa::path(
   put,
   tag = "Master Permission",
   path = "/api/v1/permission/{id}",
   request_body = PermissionUpdateRequest,
   responses(
-    (status = 200, description = "Update permission by id", body = PermissionOAS),
+    (status = 200, description = "OK", body = PermissionOAS),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
@@ -175,12 +179,13 @@ pub async fn update(authentication: Authentication, id: String, request: Json<Pe
   Ok(permission.success())
 }
 
+/// Delete permission by id
 #[utoipa::path(
   delete,
   tag = "Master Permission",
   path = "/api/v1/permission/{id}",
   responses(
-    (status = 200, description = "Delete permission by id", body = PermissionOAS),
+    (status = 200, description = "OK", body = PermissionOAS),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
@@ -215,13 +220,14 @@ pub async fn delete(authentication: Authentication, id: String) -> JsonResponse<
   Ok(permission.success())
 }
 
+/// Sync permission with user
 #[utoipa::path(
   put,
   tag = "Master Permission",
   path = "/api/v1/permission/sync-user",
   request_body = SyncPermissionToUser,
   responses(
-    (status = 200, description = "Sync permission with user", body = [PermissionOAS]),
+    (status = 200, description = "OK", body = [PermissionOAS]),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
@@ -281,14 +287,14 @@ pub async fn sync_permission_user(authentication: Authentication, request: Json<
   Ok(permissions.success())
 }
 
-
+/// Sync permission with role
 #[utoipa::path(
   put,
   tag = "Master Permission",
   path = "/api/v1/permission/sync-role",
   request_body = SyncPermissionToRole,
   responses(
-    (status = 200, description = "Sync permission with role", body = [PermissionOAS]),
+    (status = 200, description = "OK", body = [PermissionOAS]),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),

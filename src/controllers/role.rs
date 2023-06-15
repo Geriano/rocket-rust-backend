@@ -28,12 +28,13 @@ use crate::{
   middleware::Authentication
 };
 
+/// Get all role
 #[utoipa::path(
   get,
   tag = "Master Role",
   path = "/api/v1/role/",
   responses(
-    (status = 200, description = "Get all role", body = [RoleOAS]),
+    (status = 200, description = "OK", body = [RoleOAS]),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   )
@@ -55,13 +56,14 @@ pub async fn all(authentication: Authentication) -> JsonResponse<Vec<RoleOAS>> {
   ))
 }
 
+/// Create role
 #[utoipa::path(
   post,
   tag = "Master Role",
   request_body = RoleCreateRequest,
   path = "/api/v1/role/",
   responses(
-    (status = 200, description = "Create role", body = RoleOAS),
+    (status = 200, description = "OK", body = RoleOAS),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   )
@@ -102,12 +104,13 @@ pub async fn store(authentication: Authentication, request: Json<RoleCreateReque
   Ok(role.success())
 }
 
+/// Show role by id
 #[utoipa::path(
   get,
   tag = "Master Role",
   path = "/api/v1/role/{id}",
   responses(
-    (status = 200, description = "Show role by id", body = RoleOAS),
+    (status = 200, description = "OK", body = RoleOAS),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
@@ -133,13 +136,14 @@ pub async fn show(authentication: Authentication, id: String) -> JsonResponse<Ro
   Ok(role.success())
 }
 
+/// Update role by id
 #[utoipa::path(
   put,
   tag = "Master Role",
   path = "/api/v1/role/{id}",
   request_body = RoleUpdateRequest,
   responses(
-    (status = 200, description = "Update role by id", body = RoleOAS),
+    (status = 200, description = "OK", body = RoleOAS),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
@@ -175,12 +179,13 @@ pub async fn update(authentication: Authentication, id: String, request: Json<Ro
   Ok(role.success())
 }
 
+/// Delete role by id
 #[utoipa::path(
   delete,
   tag = "Master Role",
   path = "/api/v1/role/{id}",
   responses(
-    (status = 200, description = "Delete role by id", body = RoleOAS),
+    (status = 200, description = "OK", body = RoleOAS),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
@@ -215,13 +220,14 @@ pub async fn delete(authentication: Authentication, id: String) -> JsonResponse<
   Ok(role.success())
 }
 
+/// Sync role with user
 #[utoipa::path(
   put,
   tag = "Master Role",
   path = "/api/v1/role/sync-user",
   request_body = SyncRoleToUser,
   responses(
-    (status = 200, description = "Sync role with user", body = [RoleOAS]),
+    (status = 200, description = "OK", body = [RoleOAS]),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
@@ -281,13 +287,14 @@ pub async fn sync_role_user(authentication: Authentication, request: Json<SyncRo
   Ok(permissions.success())
 }
 
+/// Sync permission with role
 #[utoipa::path(
   put,
   tag = "Master Role",
   path = "/api/v1/role/sync-role",
   request_body = SyncPermissionToRole,
   responses(
-    (status = 200, description = "Sync permission with role", body = [RoleOAS]),
+    (status = 200, description = "OK", body = [RoleOAS]),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),

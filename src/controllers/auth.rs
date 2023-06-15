@@ -18,13 +18,14 @@ use crate::{
   oas::UserOAS
 };
 
+/// Authenticate email or user with password
 #[utoipa::path(
   post,
   tag = "Authentication",
   request_body = LoginRequest,
   path = "/api/v1/auth/",
   responses(
-    (status = 200, description = "Login", body = AuthenticatedResponse),
+    (status = 200, description = "OK", body = AuthenticatedResponse),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
@@ -62,12 +63,13 @@ pub async fn login(request: Json<LoginRequest>) -> JsonResponse<AuthenticatedRes
   ))
 }
 
+/// Get current authenticated user
 #[utoipa::path(
   get,
   tag = "Authentication",
   path = "/api/v1/auth/",
   responses(
-    (status = 200, description = "Get current authenticated user", body = UserOAS),
+    (status = 200, description = "OK", body = UserOAS),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   )
@@ -79,12 +81,13 @@ pub async fn user(authentication: Authentication) -> JsonResponse<UserOAS> {
   Ok(Json(user))
 }
 
+/// Revoke token current authenticated user
 #[utoipa::path(
   delete,
   tag = "Authentication",
   path = "/api/v1/auth/",
   responses(
-    (status = 200, description = "Revoke token current authenticated user"),
+    (status = 200, description = "OK"),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   )
