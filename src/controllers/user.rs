@@ -39,6 +39,11 @@ use crate::{
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
+  params(
+    ("page" = Option<i64>, Query, description = "Pagination page"),
+    ("limit" = Option<i64>, Query, description = "Pagination limit"),
+    ("search" = Option<String>, Query, description = "Pagination search"),
+  ),
   security(("token" = [])),
 )]
 #[get("/?<page>&<limit>&<search>")]
