@@ -1,13 +1,30 @@
-name: 'rocket'
+name: 'rocket-rust-boilerplate'
 version: '3.1'
 services:
-  postgres:
-    container_name: rocket-postgres
+  database:
+    container_name: rocket-rust-boilerplate-database
     image: postgres
     environment:
       TZ: Asia/Jakarta
-      POSTGRES_DB: rocket
+      POSTGRES_DB: boilerplate
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
     ports:
       - 5432:5432
+  backend:
+    container_name: rocket-rust-boilerplate-backend
+    build: 
+      dockerfile: Dockerfile
+    environment:
+      TZ: Asia/Jakarta
+    env_file:
+      - .env
+    command: cargo watch -x run
+    ports:
+      - 8000:8000
+    volumes:
+      - ./migrations:/app/migrations
+      - ./src:/app/src
+      - ./.env:/app/.env
+      - ./Cargo.toml:/app/Cargo.toml
+      - ./Rocket.toml:/app/Rocket.toml
