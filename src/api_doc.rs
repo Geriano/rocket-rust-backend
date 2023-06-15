@@ -37,6 +37,8 @@ use crate::requests;
     schemas(oas::PermissionOAS),
     schemas(oas::RoleOAS),
 
+    schemas(requests::PaginationRequest),
+
     schemas(requests::UserStoreRequest),
     schemas(requests::UserUpdateGeneralInformationRequest),
     schemas(requests::UserUpdatePasswordRequest),
