@@ -18,7 +18,17 @@ use crate::{
   oas::UserOAS
 };
 
-
+#[utoipa::path(
+  post,
+  tag = "Authentication",
+  request_body = LoginRequest,
+  path = "/api/v1/auth/",
+  responses(
+    (status = 200, description = "Login", body = AuthenticatedResponse),
+    (status = 400, description = "BAD REQUEST"),
+    (status = 500, description = "INTERNAL SERVER ERROR")
+  ),
+)]
 #[post("/", data = "<request>")]
 pub async fn login(request: Json<LoginRequest>) -> JsonResponse<AuthenticatedResponse> {
   if request.email_or_username.is_empty() || request.password.is_empty() {
@@ -52,6 +62,16 @@ pub async fn login(request: Json<LoginRequest>) -> JsonResponse<AuthenticatedRes
   ))
 }
 
+#[utoipa::path(
+  get,
+  tag = "Authentication",
+  path = "/api/v1/auth/",
+  responses(
+    (status = 200, description = "Get current authenticated user", body = UserOAS),
+    (status = 400, description = "BAD REQUEST"),
+    (status = 500, description = "INTERNAL SERVER ERROR")
+  )
+)]
 #[get("/")]
 pub async fn user(authentication: Authentication) -> JsonResponse<UserOAS> {
   let user: UserOAS = authentication.user.into();
@@ -59,6 +79,16 @@ pub async fn user(authentication: Authentication) -> JsonResponse<UserOAS> {
   Ok(Json(user))
 }
 
+#[utoipa::path(
+  delete,
+  tag = "Authentication",
+  path = "/api/v1/auth/",
+  responses(
+    (status = 200, description = "Revoke token current authenticated user"),
+    (status = 400, description = "BAD REQUEST"),
+    (status = 500, description = "INTERNAL SERVER ERROR")
+  )
+)]
 #[delete("/")]
 pub async fn logout(authentication: Authentication) -> AppResponse<()> {
   let mut conn = get_conn();

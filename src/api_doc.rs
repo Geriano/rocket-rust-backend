@@ -1,12 +1,21 @@
+use utoipa::Modify;
+use utoipa::openapi::{ComponentsBuilder, schema};
+use utoipa::openapi::security::{SecurityScheme, HttpBuilder, HttpAuthScheme};
 use utoipa::{OpenApi, openapi};
 
-use crate::controllers;
+use crate::{controllers, schemas};
 use crate::oas;
-use crate::requests;
+use crate::requests::{self, LoginRequest};
+use crate::responses;
 
 #[derive(OpenApi)]
 #[openapi(
+  modifiers(&Authentication),
   paths(
+    controllers::auth::login,
+    controllers::auth::user,
+    controllers::auth::logout,
+
     controllers::user::pagination,
     controllers::user::store,
     controllers::user::show,
@@ -39,6 +48,9 @@ use crate::requests;
 
     schemas(requests::PaginationRequest),
 
+    schemas(requests::LoginRequest),
+    schemas(responses::AuthenticatedResponse),
+
     schemas(requests::UserStoreRequest),
     schemas(requests::UserUpdateGeneralInformationRequest),
     schemas(requests::UserUpdatePasswordRequest),
@@ -54,9 +66,28 @@ use crate::requests;
     schemas(requests::SyncPermissionToRole),
   ),
   tags(
+    (name = "Authentication", description = ""),
     (name = "Master User", description = "Master User Resource Endpoint"),
     (name = "Master Permission", description = "Master Permission Resource Endpoint"),
     (name = "Master Role", description = "Master Role Resource Endpoint"),
   ),
 )]
 pub struct ApiDoc;
+
+struct Authentication;
+
+impl Modify for Authentication {
+  fn modify(&self, openapi: &mut utoipa::openapi::OpenApi) {
+    let components = openapi.components.as_mut().unwrap();
+
+    components.add_security_scheme(
+      "token",
+      SecurityScheme::Http(
+        HttpBuilder::new()
+          .scheme(HttpAuthScheme::Bearer)
+          .bearer_format("UUID")
+          .build(),
+      ),
+    );
+  }
+}
