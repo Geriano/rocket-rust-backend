@@ -1,7 +1,12 @@
 [package]
 name = "boilerplate-rocket"
-version = "0.1.0"
+description = "Boilerplate rust with rocket"
+authors = ["Geriano <gerianoadikaputra@gmail.com>"]
+license = "MIT"
+version = "0.0.1"
 edition = "2021"
+keywords = ["web", "template", "boilerplate", "mvc"]
+categories = ["framework", "web"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
