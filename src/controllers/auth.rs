@@ -72,7 +72,8 @@ pub async fn login(request: Json<LoginRequest>) -> JsonResponse<AuthenticatedRes
     (status = 200, description = "OK", body = UserOAS),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
-  )
+  ),
+  security(("token" = [])),
 )]
 #[get("/")]
 pub async fn user(authentication: Authentication) -> JsonResponse<UserOAS> {
@@ -90,7 +91,8 @@ pub async fn user(authentication: Authentication) -> JsonResponse<UserOAS> {
     (status = 200, description = "OK"),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
-  )
+  ),
+  security(("token" = [])),
 )]
 #[delete("/")]
 pub async fn logout(authentication: Authentication) -> AppResponse<()> {

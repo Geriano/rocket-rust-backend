@@ -38,7 +38,8 @@ use crate::{
     (status = 200, description = "OK", body = UserPaginationOAS),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
-  )
+  ),
+  security(("token" = [])),
 )]
 #[get("/?<page>&<limit>&<search>")]
 pub async fn pagination(
@@ -117,12 +118,13 @@ pub async fn pagination(
   post,
   path = "/api/v1/user/",
   tag = "Master User",
+  request_body = UserStoreRequest,
   responses(
     (status = 200, description = "OK", body = UserOAS),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
-  request_body = UserStoreRequest,
+  security(("token" = [])),
 )]
 #[post("/", data = "<request>")]
 pub async fn store(authentication: Authentication, request: Json<UserStoreRequest>) -> JsonResponse<UserOAS> {
@@ -189,7 +191,8 @@ pub async fn store(authentication: Authentication, request: Json<UserStoreReques
   ),
   params(
     ("id" = String, Path, description = "User ID"),
-  )
+  ),
+  security(("token" = [])),
 )]
 #[get("/<id>")]
 pub async fn show(authentication: Authentication, id: String) -> JsonResponse<UserOAS> {
@@ -214,6 +217,7 @@ pub async fn show(authentication: Authentication, id: String) -> JsonResponse<Us
   put,
   path = "/api/v1/user/{id}",
   tag = "Master User",
+  request_body = UserUpdateGeneralInformationRequest,
   responses(
     (status = 200, description = "OK", body = UserOAS),
     (status = 400, description = "BAD REQUEST"),
@@ -222,6 +226,7 @@ pub async fn show(authentication: Authentication, id: String) -> JsonResponse<Us
   params(
     ("id" = String, Path, description = "User ID"),
   ),
+  security(("token" = [])),
 )]
 #[put("/<id>", data = "<request>")]
 pub async fn update(authentication: Authentication, id: String, request: Json<UserUpdateGeneralInformationRequest>) -> JsonResponse<UserOAS> {
@@ -278,6 +283,7 @@ pub async fn update(authentication: Authentication, id: String, request: Json<Us
   put,
   path = "/api/v1/user/{id}/password",
   tag = "Master User",
+  request_body = UserUpdatePasswordRequest,
   responses(
     (status = 200, description = "OK", body = UserOAS),
     (status = 400, description = "BAD REQUEST"),
@@ -285,7 +291,8 @@ pub async fn update(authentication: Authentication, id: String, request: Json<Us
   ),
   params(
     ("id" = String, Path, description = "User ID"),
-  )
+  ),
+  security(("token" = [])),
 )]
 #[put("/<id>/password", data = "<request>")]
 pub async fn update_password(authentication: Authentication, id: String, request: Json<UserUpdatePasswordRequest>) -> JsonResponse<UserOAS> {
@@ -340,7 +347,8 @@ pub async fn update_password(authentication: Authentication, id: String, request
   ),
   params(
     ("id" = String, Path, description = "User ID"),
-  )
+  ),
+  security(("token" = [])),
 )]
 #[delete("/<id>")]
 pub async fn delete(authentication: Authentication, id: String) -> JsonResponse<UserOAS> {
@@ -379,6 +387,7 @@ pub async fn delete(authentication: Authentication, id: String) -> JsonResponse<
   params(
     ("id" = String, Path, description = "User ID"),
   ),
+  security(("token" = [])),
 )]
 #[delete("/<id>/purge")]
 pub async fn purge(authentication: Authentication, id: String) -> AppResponse<()> {

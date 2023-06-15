@@ -37,7 +37,8 @@ use crate::{
     (status = 200, description = "OK", body = [PermissionOAS]),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
-  )
+  ),
+  security(("token" = [])),
 )]
 #[get("/")]
 pub async fn all(authentication: Authentication) -> JsonResponse<Vec<PermissionOAS>> {
@@ -66,7 +67,8 @@ pub async fn all(authentication: Authentication) -> JsonResponse<Vec<PermissionO
     (status = 200, description = "OK", body = PermissionOAS),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
-  )
+  ),
+  security(("token" = [])),
 )]
 #[post("/", data = "<request>")]
 pub async fn store(authentication: Authentication, request: Json<PermissionCreateRequest>) -> JsonResponse<PermissionOAS> {
@@ -115,8 +117,9 @@ pub async fn store(authentication: Authentication, request: Json<PermissionCreat
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
   params(
-    ("id" = String, description = "Permission Id"),
+    ("id" = String, Path, description = "Permission Id"),
   ),
+  security(("token" = [])),
 )]
 #[get("/<id>")]
 pub async fn show(authentication: Authentication, id: String) -> JsonResponse<PermissionOAS> {
@@ -148,8 +151,9 @@ pub async fn show(authentication: Authentication, id: String) -> JsonResponse<Pe
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
   params(
-    ("id" = String, description = "Permission Id"),
+    ("id" = String, Path, description = "Permission Id"),
   ),
+  security(("token" = [])),
 )]
 #[put("/<id>", data = "<request>")]
 pub async fn update(authentication: Authentication, id: String, request: Json<PermissionUpdateRequest>) -> JsonResponse<PermissionOAS> {
@@ -190,8 +194,9 @@ pub async fn update(authentication: Authentication, id: String, request: Json<Pe
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
   params(
-    ("id" = String, description = "Permission Id"),
+    ("id" = String, Path, description = "Permission Id"),
   ),
+  security(("token" = [])),
 )]
 #[delete("/<id>")]
 pub async fn delete(authentication: Authentication, id: String) -> JsonResponse<PermissionOAS> {
@@ -231,6 +236,7 @@ pub async fn delete(authentication: Authentication, id: String) -> JsonResponse<
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
+  security(("token" = [])),
 )]
 #[put("/sync-user", data = "<request>")]
 pub async fn sync_permission_user(authentication: Authentication, request: Json<SyncPermissionToUser>) -> JsonResponse<Vec<Permission>> {
@@ -298,6 +304,7 @@ pub async fn sync_permission_user(authentication: Authentication, request: Json<
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
+  security(("token" = [])),
 )]
 #[put("/sync-role", data = "<request>")]
 pub async fn sync_permission_role(authentication: Authentication, request: Json<SyncPermissionToRole>) -> JsonResponse<Vec<Permission>> {

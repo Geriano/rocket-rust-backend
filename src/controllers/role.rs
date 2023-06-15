@@ -37,7 +37,8 @@ use crate::{
     (status = 200, description = "OK", body = [RoleOAS]),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
-  )
+  ),
+  security(("token" = [])),
 )]
 #[get("/")]
 pub async fn all(authentication: Authentication) -> JsonResponse<Vec<RoleOAS>> {
@@ -66,7 +67,8 @@ pub async fn all(authentication: Authentication) -> JsonResponse<Vec<RoleOAS>> {
     (status = 200, description = "OK", body = RoleOAS),
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
-  )
+  ),
+  security(("token" = [])),
 )]
 #[post("/", data = "<request>")]
 pub async fn store(authentication: Authentication, request: Json<RoleCreateRequest>) -> JsonResponse<RoleOAS> {
@@ -115,8 +117,9 @@ pub async fn store(authentication: Authentication, request: Json<RoleCreateReque
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
   params(
-    ("id" = String, description = "Role Id"),
+    ("id" = String, Path, description = "Role Id"),
   ),
+  security(("token" = [])),
 )]
 #[get("/<id>")]
 pub async fn show(authentication: Authentication, id: String) -> JsonResponse<RoleOAS> {
@@ -148,8 +151,9 @@ pub async fn show(authentication: Authentication, id: String) -> JsonResponse<Ro
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
   params(
-    ("id" = String, description = "Role Id"),
+    ("id" = String, Path, description = "Role Id"),
   ),
+  security(("token" = [])),
 )]
 #[put("/<id>", data = "<request>")]
 pub async fn update(authentication: Authentication, id: String, request: Json<RoleUpdateRequest>) -> JsonResponse<RoleOAS> {
@@ -190,8 +194,9 @@ pub async fn update(authentication: Authentication, id: String, request: Json<Ro
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
   params(
-    ("id" = String, description = "Role Id"),
+    ("id" = String, Path, description = "Role Id"),
   ),
+  security(("token" = [])),
 )]
 #[delete("/<id>")]
 pub async fn delete(authentication: Authentication, id: String) -> JsonResponse<RoleOAS> {
@@ -231,6 +236,7 @@ pub async fn delete(authentication: Authentication, id: String) -> JsonResponse<
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
+  security(("token" = [])),
 )]
 #[put("/sync-user", data = "<request>")]
 pub async fn sync_role_user(authentication: Authentication, request: Json<SyncRoleToUser>) -> JsonResponse<Vec<Role>> {
@@ -298,6 +304,7 @@ pub async fn sync_role_user(authentication: Authentication, request: Json<SyncRo
     (status = 400, description = "BAD REQUEST"),
     (status = 500, description = "INTERNAL SERVER ERROR")
   ),
+  security(("token" = [])),
 )]
 #[put("/sync-role", data = "<request>")]
 pub async fn sync_permission_role(authentication: Authentication, request: Json<SyncPermissionToRole>) -> JsonResponse<Vec<Role>> {
