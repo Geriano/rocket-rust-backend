@@ -1,5 +1,7 @@
 # rocket-rust-backend
 
+## This repo is use rust nightly
+
 ### Installation
 
 - Clone this repo
