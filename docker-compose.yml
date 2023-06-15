@@ -15,11 +15,12 @@ services:
     container_name: rocket-rust-boilerplate-backend
     build: 
       dockerfile: Dockerfile
-    environment:
-      TZ: Asia/Jakarta
     env_file:
       - .env
-    command: cargo watch -x run
+    environment:
+      TZ: Asia/Jakarta
+      DATABASE_URL: postgres://root:root@host.docker.internal/boilerplate
+    command: cargo watch -x "run --release"
     ports:
       - 8000:8000
     volumes:
